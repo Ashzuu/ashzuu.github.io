@@ -4,7 +4,9 @@ RewriteEngine On
 RewriteBase /
 
 # Home → /
-RewriteRule ^$ index.html [L]
+# Team → /team
+RewriteRule ^$            index.html       [L]
+RewriteRule ^team$        team.html        [L]
 
 # Generic rule: “/page” → “/page.html” (keeps future pages zero-config)
 RewriteCond %{REQUEST_FILENAME}.html -f

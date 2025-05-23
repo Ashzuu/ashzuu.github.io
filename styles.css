@@ -447,6 +447,60 @@ body {
   animation:spinSlow 20s linear infinite;
   opacity:.4;
 }
+
+.team-section{
+  min-height:100vh;
+  padding:6rem 2rem;
+  background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);
+  position:relative;
+}
+.team-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:2rem;
+  max-width:1200px;
+  margin:0 auto;
+}
+.team-card{
+  text-align:center;
+  padding:2.5rem 1.5rem;
+  background:rgba(255,255,255,.1);
+  border-radius:20px;
+  backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.2);
+  transition:.3s ease;
+  overflow:hidden;
+  position:relative;
+}
+.team-card:hover{
+  transform:translateY(-10px);
+  box-shadow:0 20px 40px rgba(255,215,0,.3);
+}
+.team-photo{
+  width:110px;
+  height:110px;
+  border-radius:50%;
+  object-fit:cover;
+  margin-bottom:1.2rem;
+  border:3px solid #ffd700;
+}
+.role {
+  font-weight: bold;
+  color: #ff8317;
+}
+
+
+.team-card h3{
+  font-size:1.25rem;
+  margin-bottom:.5rem;
+  color:#ffd700;
+}
+.team-card p{
+  opacity:.85;
+  line-height:1.5;
+  font-size:.95rem;
+}
+
 @keyframes float {
   0% {
     transform: translateY(100vh) translateX(0);
