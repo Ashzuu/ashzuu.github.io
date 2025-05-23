@@ -1,0 +1,28 @@
+/* Masque-scroll minimal et vitesse d’animation uniformisée */
+html {
+  scroll-behavior: smooth;
+}
+body::-webkit-scrollbar {
+  width: 6px;
+}
+body::-webkit-scrollbar-thumb {
+  background: #FFD70050;
+  border-radius: 3px;
+}
+
+/* Lightbox */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 60;
+}
+.lightbox img {
+  max-height: 90vh;
+  max-width: 90vw;
+  border-radius: 1rem;
+  box-shadow: 0 0 20px #000;
+}
