@@ -1,0 +1,14 @@
+# Clean routes for Apache 2.4+
+Options -MultiViews
+RewriteEngine On
+RewriteBase /
+
+# Home → /
+RewriteRule ^$ index.html [L]
+
+# Generic rule: “/page” → “/page.html” (keeps future pages zero-config)
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(.+?)/?$         $1.html              [L]
+
+# 404 fallback
+ErrorDocument 404 /404.html

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Page non trouvée – Lyon & ses Lumières</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        
+    </style>
+</head>
+<body>
+<div class="custom-cursor"></div>
+<div class="floating-lights"></div>
+
+<main class="error-container">
+    <h1 class="error-code">404</h1>
+    <p class="error-message">On dirait qu’aucune lumière n’éclaire cette page…</p>
+    <a href="/" class="cta-btn">Revenir à l’accueil</a>
+
+    <!-- boule à facettes -->
+    <svg class="disco" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
+                <path d="M10 0 L0 0 0 10" fill="none" stroke="#FFD700" stroke-width="0.5"/>
+            </pattern>
+        </defs>
+        <circle cx="50" cy="50" r="48" fill="url(#grid)" stroke="#FFD700" stroke-width="0.5"/>
+    </svg>
+</main>
+
+<!-- réutilise le JS commun -->
+<script src="app.js"></script>
+</body>
+</html>

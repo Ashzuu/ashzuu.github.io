@@ -410,6 +410,43 @@ body {
   animation: float 10s infinite linear;
 }
 
+/* centre le contenu */
+.error-container{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);
+}
+.error-code{
+  font-size:clamp(5rem,15vw,15rem);
+  font-weight:900;
+  line-height:1;
+  background:linear-gradient(45deg,#ffd700,#ff6b35,#ff1744,#9c27b0);
+  background-size:300% 300%;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:gradientShift 4s ease-in-out infinite;
+  text-shadow:0 0 40px rgba(255,215,0,.4);
+}
+.error-message{
+  font-size:clamp(1.2rem,3vw,2rem);
+  margin:1rem 0 2rem;
+  opacity:.85;
+}
+.disco{
+  position:absolute;
+  bottom:8%;
+  right:8%;
+  width:120px;
+  height:120px;
+  animation:spinSlow 20s linear infinite;
+  opacity:.4;
+}
 @keyframes float {
   0% {
     transform: translateY(100vh) translateX(0);
