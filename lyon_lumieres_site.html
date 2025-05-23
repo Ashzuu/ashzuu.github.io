@@ -244,6 +244,7 @@
             width: 4px;
             background: linear-gradient(to bottom, #ffd700, #ff6b35);
             transform: translateX(-50%);
+            z-index: 1000000000000000000;
         }
 
         .timeline-item {
@@ -265,7 +266,8 @@
             margin: 0 2rem;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
+            transition: all 0.3s ease;     
+            z-index: -10000000000000000000;
         }
 
         .timeline-content:hover {
@@ -753,19 +755,6 @@
                 card.style.transform = `translate(${distanceX}px, ${distanceY}px)`;
             });
         });
-
-        // Auto-navigation après un temps d'inactivité
-        let inactivityTimer;
-        function resetInactivityTimer() {
-            clearTimeout(inactivityTimer);
-            inactivityTimer = setTimeout(() => {
-                const activeSection = document.querySelector('.section.active');
-                const currentIndex = Array.from(sections).indexOf(activeSection);
-                const nextIndex = (currentIndex + 1) % sections.length;
-                const nextSectionId = sections[nextIndex].id;
-                navigateToSection(nextSectionId);
-            }, 15000);
-        }
 
         document.addEventListener('mousemove', resetInactivityTimer);
         document.addEventListener('click', resetInactivityTimer);

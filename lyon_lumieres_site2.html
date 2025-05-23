@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lyon et ses Lumières</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Mobile-first approach */
+        .desktop-cursor {
+            display: none;
+        }
+
+        @media (min-width: 1024px) {
+            body {
+                cursor: none;
+            }
+            
+            .desktop-cursor {
+                display: block;
+                position: fixed;
+                width: 20px;
+                height: 20px;
+                background: radial-gradient(circle, #ffd700, #ff6b35);
+                border-radius: 50%;
+                pointer-events: none;
+                z-index: 9999;
+                mix-blend-mode: difference;
+                transition: transform 0.1s ease;
+            }
+        }
+
+        /* Hero Section - Fully responsive */
+        .hero {
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            overflow: hidden;
+            padding: 1rem;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><radialGradient id="g"><stop offset="0%" stop-color="%23ffd700" stop-opacity="0.3"/><stop offset="100%" stop-color="%23ffd700" stop-opacity="0"/></radialGradient></defs><circle cx="200" cy="200" r="3" fill="url(%23g)"/><circle cx="400" cy="100" r="2" fill="url(%23g)"/><circle cx="600" cy="300" r="2" fill="url(%23g)"/><circle cx="800" cy="150" r="3" fill="url(%23g)"/><circle cx="300" cy="400" r="2" fill="url(%23g)"/><circle cx="700" cy="500" r="3" fill="url(%23g)"/><circle cx="100" cy="600" r="2" fill="url(%23g)"/><circle cx="900" cy="400" r="2" fill="url(%23g)"/><circle cx="500" cy="700" r="3" fill="url(%23g)"/></svg>') repeat;
+            animation: stars 20s linear infinite;
+        }
+
+        @keyframes stars {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-1000px); }
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+            position: relative;
+            max-width: 90%;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 12vw, 8rem);
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ffd700, #ff6b35, #ff1744, #9c27b0);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease-in-out infinite;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .hero .subtitle {
+            font-size: clamp(1rem, 4vw, 2rem);
+            margin-bottom: 2rem;
+            opacity: 0.8;
+            animation: fadeInUp 1s ease-out 0.5s both;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 0.8; transform: translateY(0); }
+        }
+
+        /* Mobile Navigation */
+        .mobile-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-around;
+            padding: 0.5rem;
+            z-index: 1000;
+        }
+
+        .mobile-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 10px;
+            flex: 1;
+            max-width: 80px;
+        }
+
+        .mobile-nav-item.active,
+        .mobile-nav-item:hover {
+            background: rgba(255, 215, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .mobile-nav-icon {
+            font-size: 1.2rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .mobile-nav-label {
+            font-size: 0.7rem;
+            text-align: center;
+        }
+
+        /* Desktop Navigation */
+        .desktop-nav {
+            display: none;
+        }
+
+        @media (min-width: 1024px) {
+            .mobile-nav {
+                display: none;
+            }
+            
+            .desktop-nav {
+                display: block;
+                position: fixed;
+                top: 50%;
+                right: 2rem;
+                transform: translateY(-50%);
+                z-index: 1000;
+            }
+            
+            .nav-item {
+                display: block;
+                width: 12px;
+                height: 12px;
+                margin: 1rem 0;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.3);
+                transition: all 0.3s ease;
+                cursor: pointer;
+                position: relative;
+            }
+            
+            .nav-item.active,
+            .nav-item:hover {
+                background: #ffd700;
+                transform: scale(1.5);
+                box-shadow: 0 0 20px #ffd700;
+            }
+            
+            .nav-item::after {
+                content: attr(data-label);
+                position: absolute;
+                right: 20px;
+                top: 50%;
+                transform: translateY(-50%);
+                background: rgba(0, 0, 0, 0.8);
+                padding: 0.5rem 1rem;
+                border-radius: 20px;
+                font-size: 0.8rem;
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.3s ease;
+                white-space: nowrap;
+            }
+            
+            .nav-item:hover::after {
+                opacity: 1;
+            }
+        }
+
+        /* Sections - Responsive */
+        .section {
+            min-height: 100vh;
+            padding: 2rem 1rem 6rem;
+            position: relative;
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .section-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .section h2 {
+            font-size: clamp(1.8rem, 6vw, 4rem);
+            margin-bottom: 1.5rem;
+            text-align: center;
+            background: linear-gradient(45deg, #ffd700, #ff6b35);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        @media (min-width: 768px) {
+            .section {
+                padding: 3rem 2rem 2rem;
+            }
+            
+            .section h2 {
+                margin-bottom: 2rem;
+            }
+        }
+
+        /* Interactive Map - Fully responsive */
+        .interactive-map {
+            background: linear-gradient(135deg, #2d1b69, #11998e);
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .map-container {
+            position: relative;
+            width: 100%;
+            height: 50vh;
+            background: linear-gradient(45deg, #1a1a2e, #16213e);
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(255, 215, 0, 0.1) 0%, transparent 30%),
+                radial-gradient(circle at 75% 75%, rgba(255, 107, 53, 0.1) 0%, transparent 30%),
+                radial-gradient(circle at 50% 50%, rgba(156, 39, 176, 0.05) 0%, transparent 50%);
+            overflow: hidden;
+        }
+
+        @media (min-width: 768px) {
+            .map-container {
+                height: 60vh;
+            }
+        }
+
+        .map-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M20,30 Q30,10 50,30 Q70,10 80,30 L80,70 Q70,90 50,70 Q30,90 20,70 Z" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/><path d="M10,50 L90,50 M50,10 L50,90" stroke="rgba(255,255,255,0.05)" stroke-width="0.3"/></svg>');
+            opacity: 0.3;
+        }
+
+        .map-point {
+            position: absolute;
+            width: clamp(15px, 3vw, 25px);
+            height: clamp(15px, 3vw, 25px);
+            background: #ffd700;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-weight: bold;
+            font-size: clamp(0.6rem, 1.5vw, 1rem);
+            z-index: 10;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(255, 215, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+        }
+
+        .map-point:hover {
+            transform: scale(1.5);
+            box-shadow: 0 0 30px #ffd700;
+            animation: none;
+        }
+
+        .map-point.visited {
+            background: #4CAF50;
+            animation: none;
+        }
+
+        .map-info-panel {
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(20px);
+            border-top: 2px solid #ffd700;
+            padding: 1rem;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .map-info-panel.show {
+            transform: translateY(0);
+        }
+
+        .map-info-panel h3 {
+            color: #ffd700;
+            margin-bottom: 0.5rem;
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+        }
+
+        .map-info-panel p {
+            font-size: clamp(0.8rem, 2vw, 1rem);
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        /* Game Section */
+        .game-section {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .game-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .game-title {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            margin-bottom: 1rem;
+            color: #ffd700;
+        }
+
+        .lights-game {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            margin: 2rem 0;
+            max-width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        @media (min-width: 768px) {
+            .lights-game {
+                gap: 1rem;
+                max-width: 400px;
+            }
+        }
+
+        .light-bulb {
+            aspect-ratio: 1;
+            background: #333;
+            border: 2px solid #666;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .light-bulb.lit {
+            background: linear-gradient(45deg, #ffd700, #ff6b35);
+            border-color: #ffd700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+            transform: scale(1.05);
+        }
+
+        .light-bulb:hover {
+            transform: scale(1.1);
+            border-color: #ffd700;
+        }
+
+        .game-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+            margin-top: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .game-controls {
+                flex-direction: row;
+                justify-content: center;
+            }
+        }
+
+        .game-stats {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        .stat-label {
+            font-size: clamp(0.8rem, 2vw, 1rem);
+            opacity: 0.8;
+        }
+
+        /* Responsive Grid Layouts */
+        .light-grid, .innovation-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .light-grid, .innovation-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .light-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .innovation-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .light-card, .innovation-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (min-width: 768px) {
+            .light-card, .innovation-card {
+                padding: 2rem;
+                border-radius: 20px;
+            }
+        }
+
+        .light-card::before, .innovation-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 215, 0, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s ease;
+            opacity: 0;
+        }
+
+        .light-card:hover::before, .innovation-card:hover::before {
+            opacity: 1;
+            transform: rotate(45deg) translate(50%, 50%);
+        }
+
+        .light-card:hover, .innovation-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(255, 215, 0, 0.3);
+        }
+
+        @media (min-width: 768px) {
+            .light-card:hover, .innovation-card:hover {
+                transform: translateY(-10px) scale(1.02);
+                box-shadow: 0 20px 40px rgba(255, 215, 0, 0.3);
+            }
+        }
+
+        .light-card h3, .innovation-card h3 {
+            font-size: clamp(1.1rem, 3vw, 1.5rem);
+            margin-bottom: 1rem;
+            color: #ffd700;
+        }
+
+        .light-card p, .innovation-card p {
+            line-height: 1.6;
+            opacity: 0.9;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+        }
+
+        .innovation-icon {
+            font-size: clamp(2rem, 6vw, 3rem);
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        /* Timeline - Responsive */
+        .cinema-section {
+            background: linear-gradient(135deg, #434343, #000000);
+        }
+
+        .cinema-timeline {
+            position: relative;
+            margin: 2rem 0;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 2rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #ffd700, #ff6b35);
+        }
+
+        @media (min-width: 768px) {
+            .timeline-line {
+                left: 50%;
+                width: 4px;
+                transform: translateX(-50%);
+            }
+        }
+
+        .timeline-item {
+            display: flex;
+            margin: 2rem 0;
+            align-items: center;
+            position: relative;
+            padding-left: 4rem;
+        }
+
+        @media (min-width: 768px) {
+            .timeline-item {
+                margin: 3rem 0;
+                padding-left: 0;
+            }
+            
+            .timeline-item:nth-child(even) {
+                flex-direction: row-reverse;
+            }
+        }
+
+        .timeline-content {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            margin-left: 0;
+        }
+
+        @media (min-width: 768px) {
+            .timeline-content {
+                margin: 0 2rem;
+                padding: 2rem;
+            }
+        }
+
+        .timeline-content:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 20px rgba(255, 215, 0, 0.2);
+        }
+
+        @media (min-width: 768px) {
+            .timeline-content:hover {
+                transform: scale(1.05);
+                box-shadow: 0 15px 30px rgba(255, 215, 0, 0.2);
+            }
+        }
+
+        .timeline-date {
+            position: absolute;
+            left: -0.5rem;
+            background: #ffd700;
+            color: #000;
+            padding: 0.4rem 0.8rem;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: clamp(0.7rem, 2vw, 0.9rem);
+        }
+
+        @media (min-width: 768px) {
+            .timeline-date {
+                left: 50%;
+                transform: translateX(-50%);
+                padding: 0.5rem 1rem;
+                border-radius: 20px;
+            }
+        }
+
+        /* Buttons - Responsive */
+        .cta-btn {
+            display: inline-block;
+            padding: clamp(0.8rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2rem);
+            background: linear-gradient(45deg, #ffd700, #ff6b35);
+            color: #000;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            margin: 0.5rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+            text-align: center;
+            min-width: 120px;
+        }
+
+        @media (min-width: 768px) {
+            .cta-btn {
+                border-radius: 30px;
+                margin: 1rem;
+            }
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(255, 215, 0, 0.4);
+            background: linear-gradient(45deg, #ff6b35, #ffd700);
+        }
+
+        @media (min-width: 768px) {
+            .cta-btn:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 10px 20px rgba(255, 215, 0, 0.4);
+            }
+        }
+
+        /* Floating elements - Adjusted for mobile */
+        .floating-lights {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .floating-light {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: #ffd700;
+            border-radius: 50%;
+            opacity: 0.4;
+            animation: float 10s infinite linear;
+        }
+
+        @media (min-width: 768px) {
+            .floating-light {
+                width: 4px;
+                height: 4px;
+                opacity: 0.6;
+            }
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.4;
+            }
+            90% {
+                opacity: 0.4;
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        @media (min-width: 768px) {
+            @keyframes float {
+                0% {
+                    transform: translateY(100vh) translateX(0);
+                    opacity: 0;
+                }
+                10% {
+                    opacity: 0.6;
+                }
+                90% {
+                    opacity: 0.6;
+                }
+                100% {
+                    transform: translateY(-100px) translateX(100px);
+                    opacity: 0;
+                }
+            }
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ffd700;
+            animation: bounce 2s infinite;
+            font-size: clamp(1rem, 3vw, 1.5rem);
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(45deg, #ffd700, #ff6b35);
+            z-index: 1001;
+            transition: width 0.3s ease;
+        }
+
+        /* Modal for mobile info */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            padding: 2rem;
+            border-radius: 20px;
+            max-width: 90%;
+            max-height: 80%;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: #ffd700;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .fete-section {
+            background: linear-gradient(135deg, #2d1b69, #11998e);
+        }
+
+        .innovation-section {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        /* Accessibility improvements */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Focus styles for accessibility */
+        .cta-btn:focus,
+        .nav-item:focus,
+        .mobile-nav-item:focus,
+        .map-point:focus,
+        .light-bulb:focus {
+            outline: 2px solid #ffd700;
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar"></div>
+    <div class="desktop-cursor"></div>
+    <div class="floating-lights"></div>
+
+    <!-- Mobile Navigation -->
+    <nav class="mobile-nav">
+        <div class="mobile-nav-item active" data-section="hero">
+            <div class="mobile-nav-icon">🏠</div>
+            <div class="mobile-nav-label">Accueil</div>
+        </div>
+        <div class="mobile-nav-item" data-section="fete">
+            <div class="mobile-nav-icon">💡</div>
+            <div class="mobile-nav-label">Fête</div>
+        </div>
+        <div class="mobile-nav-item" data-section="cinema">
+            <div class="mobile-nav-icon">🎬</div>
+            <div class="mobile-nav-label">Cinéma</div>
+        </div>
+        <div class="mobile-nav-item" data-section="innovation">
+            <div class="mobile-nav-icon">🚀</div>
+            <div class="mobile-nav-label">Innovation</div>
+        </div>
+        <div class="mobile-nav-item" data-section="game">
+            <div class="mobile-nav-icon">🎮</div>
+            <div class="mobile-nav-label">Jeu</div>
+        </div>
+    </nav>
+
+    <!-- Desktop Navigation -->
+    <nav class="desktop-nav">
+        <div class="nav-item active" data-section="hero" data-label="Accueil"></div>
+        <div class="nav-item" data-section="fete" data-label="Fête des Lumières"></div>
+        <div class="nav-item" data-section="cinema" data-label="Frères Lumière"></div>
+        <div class="nav-item" data-section="innovation" data-label="Innovation"></div>
+        <div class="nav-item" data-section="game" data-label="Jeu des Lumières"></div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero section active" id="hero">
+        <div class="hero-content">
+            <h1>LYON</h1>
+            <p class="subtitle">Capitale des Lumières</p>
+            <button class="cta-btn" onclick="navigateToSection('fete')">Découvrir les Lumières</button>
+            <div class="scroll-indicator">▼</div>
+        </div>
+    </section>
+
+    <!-- Fête des Lumières -->
+    <section class="section fete-section" id="fete">
+        <div class="section-content">
+            <h2>Fête des Lumières</h2>
+            <p style="text-align: center; font-size: clamp(1rem, 3vw, 1.2rem); margin-bottom: 2rem; opacity: 0.9;">
+                Chaque décembre, Lyon se transforme en un théâtre de lumière extraordinaire
+            </p>
+            
+            <div class="interactive-map">
+                <div class="map-container">
+                    <div class="map-overlay"></div>
+                    <div class="map
