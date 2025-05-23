@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Lyon &amp; Lumières – Facettes Éblouissantes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Tailwind CDN + configuration -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            night: '#0f172a',
+            gold: '#FFD700'
+          },
+          keyframes: {
+            spinSlow: {
+              '0%': { transform: 'rotate(0deg)' },
+              '100%': { transform: 'rotate(360deg)' }
+            },
+            fadeInUp: {
+              '0%': { opacity: 0, transform: 'translateY(40px)' },
+              '100%': { opacity: 1, transform: 'translateY(0)' }
+            }
+          },
+          animation: {
+            'spin-slow': 'spinSlow 20s linear infinite',
+            'fade-in-up': 'fadeInUp 0.8s ease-out both'
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Leaflet pour la carte interactive -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+</head>
+<body class="bg-night text-gray-200 font-[Montserrat] scroll-smooth">
+  <!-- Barre de navigation fixe -->
+  <nav class="fixed inset-x-0 top-0 z-50 bg-night/80 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto flex items-center justify-between px-6 py-3">
+      <a href="#" class="text-gold text-2xl font-extrabold animate-pulse">Lyon&nbsp;&amp;&nbsp;Lumières</a>
+      <ul id="navMenu" class="hidden md:flex gap-8">
+        <li><a href="#hist" class="hover:text-gold transition">Facette&nbsp;Histoire</a></li>
+        <li><a href="#art" class="hover:text-gold transition">Facette&nbsp;Artistique</a></li>
+        <li><a href="#map" class="hover:text-gold transition">Facette&nbsp;Nocturne</a></li>
+        <li><a href="#about" class="hover:text-gold transition">À&nbsp;Propos</a></li>
+      </ul>
+      <button id="burger" class="md:hidden text-gray-300 focus:outline-none" aria-label="Ouvrir le menu">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO pleine page -->
+  <section class="relative h-screen flex items-center justify-center overflow-hidden" id="hero">
+    <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover brightness-50" poster="img/hero.jpg">
+      <source src="video/lyon-night.mp4" type="video/mp4" />
+    </video>
+
+    <div class="relative z-10 text-center px-6">
+      <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-gold drop-shadow-xl animate-fade-in-up">Les Lumières de Lyon sous toutes leurs facettes</h1>
+      <p class="mt-4 text-lg md:text-2xl mx-auto max-w-3xl animate-fade-in-up [animation-delay:0.3s]">De la première projection des frères&nbsp;Lumière aux installations futuristes, explorez la ville qui brille jour et nuit.</p>
+      <a href="#art" class="mt-8 inline-block bg-gold text-night font-semibold px-8 py-3 rounded-full shadow-lg hover:-translate-y-1 transition animate-fade-in-up [animation-delay:0.6s]">Plonger dans la lumière</a>
+    </div>
+
+    <!-- Boule à facettes décorative -->
+    <div class="absolute bottom-12 right-12 hidden lg:block opacity-50 animate-spin-slow">
+      <svg width="180" height="180" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
+            <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#FFD700" stroke-width="0.5" />
+          </pattern>
+        </defs>
+        <circle cx="50" cy="50" r="48" fill="url(#grid)" stroke="#FFD700" stroke-width="0.5" />
+      </svg>
+    </div>
+  </section>
+
+  <!-- FACETTE HISTORIQUE -->
+  <section id="hist" class="py-20 bg-night">
+    <div class="max-w-6xl mx-auto px-6">
+      <h2 class="text-3xl font-bold text-gold mb-12">Facette historique</h2>
+      <div class="grid md:grid-cols-2 gap-12">
+        <!-- Élément de timeline -->
+        <div class="relative pl-8">
+          <span class="absolute -left-2 top-2 w-3 h-3 bg-gold rounded-full"></span>
+          <h3 class="text-xl font-semibold mb-1">1895 · Invention du Cinématographe</h3>
+          <p class="text-gray-300 leading-relaxed">Auguste et Louis&nbsp;Lumière organisent la première projection publique payante, marquant la naissance du cinéma.</p>
+        </div>
+        <div class="relative pl-8">
+          <span class="absolute -left-2 top-2 w-3 h-3 bg-gold rounded-full"></span>
+          <h3 class="text-xl font-semibold mb-1">1964 · Illumination de la basilique</h3>
+          <p class="text-gray-300 leading-relaxed">Fourvière adopte un éclairage fixe qui redessine la skyline nocturne lyonnaise.</p>
+        </div>
+        <div class="relative pl-8">
+          <span class="absolute -left-2 top-2 w-3 h-3 bg-gold rounded-full"></span>
+          <h3 class="text-xl font-semibold mb-1">1999 · Première Fête modernisée</h3>
+          <p class="text-gray-300 leading-relaxed">La municipalité ouvre la création lumineuse aux artistes internationaux ; la fête gagne une dimension planétaire.</p>
+        </div>
+        <div class="relative pl-8">
+          <span class="absolute -left-2 top-2 w-3 h-3 bg-gold rounded-full"></span>
+          <h3 class="text-xl font-semibold mb-1">2025 · Éclairage neutre en carbone</h3>
+          <p class="text-gray-300 leading-relaxed">Lyon vise 100 % d’installations LED alimentées par énergies renouvelables pour sublimer la ville sans compromis écologique.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FACETTE ARTISTIQUE -->
+  <section id="art" class="py-20 bg-night">
+    <div class="max-w-7xl mx-auto px-6">
+      <h2 class="text-3xl font-bold text-gold mb-12">Facette artistique</h2>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Carte d’œuvre lumineuse -->
+        <figure class="relative group cursor-pointer overflow-hidden rounded-3xl shadow-lg">
+          <img src="img/fdl1.jpg" alt="Cathédrale Saint‑Jean – Fresque laser" class="w-full h-60 object-cover group-hover:scale-110 transition duration-500">
+          <figcaption class="absolute inset-0 bg-night/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-500 text-center p-4">
+            <span class="text-gold font-semibold">Cathédrale Saint‑Jean · Fresque laser</span>
+          </figcaption>
+        </figure>
+        <figure class="relative group cursor-pointer overflow-hidden rounded-3xl shadow-lg">
+          <img src="img/fdl2.jpg" alt="Place des Terreaux – Mapping immersif" class="w-full h-60 object-cover group-hover:scale-110 transition duration-500">
+          <figcaption class="absolute inset-0 bg-night/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-500 text-center p-4">
+            <span class="text-gold font-semibold">Place des Terreaux · Mapping immersif</span>
+          </figcaption>
+        </figure>
+        <figure class="relative group cursor-pointer overflow-hidden rounded-3xl shadow-lg">
+          <img src="img/fdl3.jpg" alt="Pont Bonaparte – Nébuleuse holographique" class="w-full h-60 object-cover group-hover:scale-110 transition duration-500">
+          <figcaption class="absolute inset-0 bg-night/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-500 text-center p-4">
+            <span class="text-gold font-semibold">Pont Bonaparte · Nébuleuse holographique</span>
+          </figcaption>
+        </figure>
+        <!-- Ajoutez d'autres figures au besoin -->
+      </div>
+    </div>
+  </section>
+
+  <!-- FACETTE NOCTURNE (carte) -->
+  <section id="map" class="relative h-[600px]">
+    <div id="lyonMap" class="absolute inset-0"></div>
+    <div class="absolute top-6 left-6 bg-night/80 backdrop-blur p-4 rounded-xl shadow-lg max-w-xs">
+      <h3 class="text-xl font-bold text-gold mb-2">Facette nocturne</h3>
+      <p class="text-gray-300 text-sm leading-relaxed">Repérez les installations majeures de la prochaine Fête des Lumières et planifiez votre parcours.</p>
+    </div>
+  </section>
+
+  <!-- À PROPOS -->
+  <section id="about" class="py-16 bg-night">
+    <div class="max-w-5xl mx-auto px-6 text-center">
+      <h2 class="text-3xl font-bold text-gold mb-6">À propos</h2>
+      <p class="text-gray-300 leading-relaxed">Projet « Lyon &amp; Lumières » réalisé par Éclaireurs Numériques (xxxxxxxxx). Données issues de l’open‑data lyonnais ; design et développement first‑mobile, zéro build step, neutre en CO₂.</p>
+    </div>
+  </section>
+
+  <!-- Pied de page -->
+  <footer class="py-8 bg-night border-t border-gray-700 text-gray-400">
+    <div class="max-w-5xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+      <p>© 2025 Lyon &amp; Lumières</p>
+      <ul class="flex gap-6 text-sm">
+        <li><a href="https://github.com/xxxxxxxxx/lyon-lumieres" class="hover:text-gold">Code&nbsp;source</a></li>
+        <li><a href="#" class="hover:text-gold">Crédits&nbsp;médias</a></li>
+        <li><a href="#" class="hover:text-gold">Contact</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // Mobile navigation toggle
+    document.getElementById('burger').addEventListener('click', () => {
+      document.getElementById('navMenu').classList.toggle('hidden');
+    });
+
+    // Leaflet map initialisation
+    const map = L.map('lyonMap', { zoomControl: false, attributionControl: false }).setView([45.764043, 4.835659], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19
+    }).addTo(map);
+
+    const spots = [
+      { name: 'Place des Terreaux', coords: [45.7675, 4.8339] },
+      { name: 'Basilique de Fourvière', coords: [45.7622, 4.8218] },
+      { name: 'Cathédrale Saint‑Jean', coords: [45.7600, 4.8270] }
+    ];
+
+    spots.forEach(s => L.marker(s.coords).addTo(map).bindPopup(`<strong>${s.name}</strong>`));
+  </script>
+</body>
+</html>
