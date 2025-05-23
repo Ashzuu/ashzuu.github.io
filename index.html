@@ -1,146 +1,775 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <meta charset="utf-8">
-    <title>Lyon & Lumières – Facettes Éblouissantes</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-
-    <!-- Tailwind CSS CDN + config perso -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: { night: '#0f172a', gold: '#FFD700' },
-            keyframes: {
-              spinSlow: { '0%': {transform:'rotate(0)'}, '100%': {transform:'rotate(360deg)'} },
-              fadeInUp:{'0%':{opacity:0,transform:'translateY(40px)'},'100%':{opacity:1,transform:'translateY(0)'}}
-            },
-            animation:{'spin-slow':'spinSlow 20s linear infinite','fade-in-up':'fadeInUp .8s ease-out both'}
-          }
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lyon et ses Lumières</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-      };
-    </script>
 
-    <!-- feuilles et scripts locaux -->
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css">
-  </head>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            overflow-x: hidden;
+            cursor: none;
+        }
 
-  <body class="bg-night text-gray-200 font-[Montserrat] scroll-smooth">
-    <!-- Barre de nav -->
-    <nav
-      class="fixed inset-x-0 top-0 z-50 bg-night/80 backdrop-blur-md">
-      <div class="mx-auto max-w-7xl flex items-center justify-between px-6 py-3">
-        <a href="#" class="text-gold text-2xl font-extrabold animate-pulse">Lyon&nbsp;&amp;&nbsp;Lumières</a>
-        <ul id="navMenu" class="hidden md:flex gap-8">
-          <li><a href="#hist" class="hover:text-gold">Facette Histoire</a></li>
-          <li><a href="#art"  class="hover:text-gold">Facette Artistique</a></li>
-          <li><a href="#map"  class="hover:text-gold">Facette Nocturne</a></li>
-          <li><a href="#about"class="hover:text-gold">À Propos</a></li>
-        </ul>
-        <button id="burger" class="md:hidden text-gray-300" aria-label="Menu">
-          <!-- icône burger -->
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none"
-               viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M4 6h16M4 12h16M4 18h16"/>
-          </svg>
-        </button>
-      </div>
+        /* Curseur personnalisé */
+        .custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, #ffd700, #ff6b35);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transition: transform 0.1s ease;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><radialGradient id="g"><stop offset="0%" stop-color="%23ffd700" stop-opacity="0.3"/><stop offset="100%" stop-color="%23ffd700" stop-opacity="0"/></radialGradient></defs><circle cx="200" cy="200" r="3" fill="url(%23g)"/><circle cx="400" cy="100" r="2" fill="url(%23g)"/><circle cx="600" cy="300" r="2" fill="url(%23g)"/><circle cx="800" cy="150" r="3" fill="url(%23g)"/><circle cx="300" cy="400" r="2" fill="url(%23g)"/><circle cx="700" cy="500" r="3" fill="url(%23g)"/><circle cx="100" cy="600" r="2" fill="url(%23g)"/><circle cx="900" cy="400" r="2" fill="url(%23g)"/><circle cx="500" cy="700" r="3" fill="url(%23g)"/></svg>') repeat;
+            animation: stars 20s linear infinite;
+        }
+
+        @keyframes stars {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-1000px); }
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 8rem);
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ffd700, #ff6b35, #ff1744, #9c27b0);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease-in-out infinite;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .hero .subtitle {
+            font-size: clamp(1.2rem, 3vw, 2rem);
+            margin-bottom: 2rem;
+            opacity: 0.8;
+            animation: fadeInUp 1s ease-out 0.5s both;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 0.8; transform: translateY(0); }
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 50%;
+            right: 2rem;
+            transform: translateY(-50%);
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: block;
+            width: 12px;
+            height: 12px;
+            margin: 1rem 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .nav-item.active,
+        .nav-item:hover {
+            background: #ffd700;
+            transform: scale(1.5);
+            box-shadow: 0 0 20px #ffd700;
+        }
+
+        .nav-item::after {
+            content: attr(data-label);
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .nav-item:hover::after {
+            opacity: 1;
+        }
+
+        /* Sections */
+        .section {
+            min-height: 100vh;
+            padding: 5rem 2rem;
+            position: relative;
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .section-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section h2 {
+            font-size: clamp(2rem, 5vw, 4rem);
+            margin-bottom: 2rem;
+            text-align: center;
+            background: linear-gradient(45deg, #ffd700, #ff6b35);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Fête des Lumières Section */
+        .fete-section {
+            background: linear-gradient(135deg, #2d1b69, #11998e);
+        }
+
+        .light-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .light-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .light-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 215, 0, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s ease;
+            opacity: 0;
+        }
+
+        .light-card:hover::before {
+            opacity: 1;
+            transform: rotate(45deg) translate(50%, 50%);
+        }
+
+        .light-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(255, 215, 0, 0.3);
+        }
+
+        .light-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #ffd700;
+        }
+
+        .light-card p {
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        /* Frères Lumière Section */
+        .cinema-section {
+            background: linear-gradient(135deg, #434343, #000000);
+        }
+
+        .cinema-timeline {
+            position: relative;
+            margin: 3rem 0;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, #ffd700, #ff6b35);
+            transform: translateX(-50%);
+            z-index: 1000000000000000000;
+        }
+
+        .timeline-item {
+            display: flex;
+            margin: 3rem 0;
+            align-items: center;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 0 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;     
+            z-index: -10000000000000000000;
+        }
+
+        .timeline-content:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(255, 215, 0, 0.2);
+        }
+
+        .timeline-date {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ffd700;
+            color: #000;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        /* Innovation Section */
+        .innovation-section {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .innovation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .innovation-card {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .innovation-card::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.1), transparent);
+            transition: all 0.5s ease;
+            transform: translate(-50%, -50%);
+        }
+
+        .innovation-card:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .innovation-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 25px 50px rgba(255, 215, 0, 0.3);
+        }
+
+        .innovation-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .innovation-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: #ffd700;
+        }
+
+        /* Interactive Map */
+        .map-container {
+            position: relative;
+            width: 100%;
+            height: 60vh;
+            background: linear-gradient(45deg, #1a1a2e, #16213e);
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 2rem 0;
+        }
+
+        .map-point {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #ffd700;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(255, 215, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+        }
+
+        .map-point:hover {
+            transform: scale(1.5);
+            box-shadow: 0 0 30px #ffd700;
+        }
+
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.9);
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+            border: 1px solid #ffd700;
+        }
+
+        .tooltip.show {
+            opacity: 1;
+        }
+
+        /* Floating elements */
+        .floating-lights {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .floating-light {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #ffd700;
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float 10s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+            
+            .section {
+                padding: 3rem 1rem;
+            }
+            
+            .nav {
+                display: none;
+            }
+            
+            .timeline-item {
+                flex-direction: column !important;
+            }
+            
+            .timeline-content {
+                margin: 1rem 0 !important;
+            }
+        }
+
+        /* Buttons */
+        .cta-btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(45deg, #ffd700, #ff6b35);
+            color: #000;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            margin: 1rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(255, 215, 0, 0.4);
+            background: linear-gradient(45deg, #ff6b35, #ffd700);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ffd700;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="custom-cursor"></div>
+    <div class="floating-lights"></div>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-item active" data-section="hero" data-label="Accueil"></div>
+        <div class="nav-item" data-section="fete" data-label="Fête des Lumières"></div>
+        <div class="nav-item" data-section="cinema" data-label="Frères Lumière"></div>
+        <div class="nav-item" data-section="innovation" data-label="Innovation"></div>
     </nav>
 
-    <!-- HERO -->
-    <section id="hero"
-      class="relative h-screen flex items-center justify-center overflow-hidden">
-      <video class="absolute inset-0 w-full h-full object-cover brightness-50"
-             autoplay muted loop playsinline
-             poster="assets/img/hero.jpg">
-        <source src="assets/video/lyon-night.mp4" type="video/mp4">
-      </video>
-
-      <div class="relative z-10 text-center px-6">
-        <h1 class="text-5xl md:text-6xl font-extrabold text-gold drop-shadow-xl animate-fade-in-up">
-          Les Lumières de Lyon sous toutes leurs facettes
-        </h1>
-        <p class="mt-4 text-lg md:text-2xl max-w-3xl mx-auto animate-fade-in-up [animation-delay:.3s]">
-          De la première projection des frères&nbsp;Lumière aux installations
-          futuristes, explorez la ville qui brille jour et nuit.
-        </p>
-        <a href="#art"
-           class="mt-8 inline-block bg-gold text-night font-semibold px-8 py-3
-                  rounded-full shadow-lg hover:-translate-y-1 transition
-                  animate-fade-in-up [animation-delay:.6s]">
-          Plonger dans la lumière
-        </a>
-      </div>
-
-      <!-- Boule à facettes -->
-      <div
-        class="absolute bottom-12 right-12 hidden lg:block opacity-50 animate-spin-slow">
-        <svg width="180" height="180" viewBox="0 0 100 100"
-             xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
-              <path d="M10 0 L0 0 0 10" fill="none"
-                    stroke="#FFD700" stroke-width="0.5"/>
-            </pattern>
-          </defs>
-          <circle cx="50" cy="50" r="48" fill="url(#grid)"
-                  stroke="#FFD700" stroke-width="0.5"/>
-        </svg>
-      </div>
+    <!-- Hero Section -->
+    <section class="hero section active" id="hero">
+        <div class="hero-content">
+            <h1>LYON</h1>
+            <p class="subtitle">Capitale des Lumières</p>
+            <button class="cta-btn" onclick="navigateToSection('fete')">Découvrir les Lumières</button>
+            <div class="scroll-indicator">▼</div>
+        </div>
     </section>
 
-    <!-- FACETTE HISTORIQUE -->
-    <section id="hist" class="py-20 bg-night">
-      <div class="max-w-6xl mx-auto px-6">
-        <h2 class="text-3xl font-bold text-gold mb-12">Facette historique</h2>
-        <div id="timeline" class="grid md:grid-cols-2 gap-12"></div>
-      </div>
+    <!-- Fête des Lumières -->
+    <section class="section fete-section" id="fete">
+        <div class="section-content">
+            <h2>Fête des Lumières</h2>
+            <p style="text-align: center; font-size: 1.2rem; margin-bottom: 2rem; opacity: 0.9;">
+                Chaque décembre, Lyon se transforme en un théâtre de lumière extraordinaire
+            </p>
+            
+            <div class="map-container">
+                <div class="map-point" style="top: 30%; left: 25%;" data-tooltip="Cathédrale Saint-Jean - Point de départ historique"></div>
+                <div class="map-point" style="top: 20%; left: 45%;" data-tooltip="Basilique de Fourvière - Vue panoramique"></div>
+                <div class="map-point" style="top: 60%; left: 35%;" data-tooltip="Place Bellecour - Plus grande place piétonne d'Europe"></div>
+                <div class="map-point" style="top: 40%; left: 60%;" data-tooltip="Théâtre des Célestins - Architecture lumineuse"></div>
+                <div class="map-point" style="top: 70%; left: 70%;" data-tooltip="Parc de la Tête d'Or - Illuminations naturelles"></div>
+            </div>
+
+            <div class="light-grid">
+                <div class="light-card">
+                    <h3>🏛️ Patrimoine Illuminé</h3>
+                    <p>Les monuments historiques de Lyon se parent de mille feux, révélant leur beauté architecturale sous un jour nouveau. La Basilique de Fourvière, les traboules du Vieux Lyon, tous participent à cette symphonie lumineuse.</p>
+                </div>
+                <div class="light-card">
+                    <h3>🎨 Créations Artistiques</h3>
+                    <p>Des artistes du monde entier transforment la ville en galerie d'art à ciel ouvert. Projections monumentales, installations interactives, chaque coin de rue devient une œuvre d'art éphémère.</p>
+                </div>
+                <div class="light-card">
+                    <h3>🌟 Tradition Populaire</h3>
+                    <p>Née d'une tradition séculaire, la Fête des Lumières rassemble plus de 4 millions de visiteurs. Chaque Lyonnais illumine ses fenêtres, perpétuant cette tradition magique depuis 1852.</p>
+                </div>
+                <div class="light-card">
+                    <h3>🚶 Parcours Nocturnes</h3>
+                    <p>Des itinéraires thématiques guident les visiteurs à travers la ville transformée. Du Vieux Lyon aux Pentes de la Croix-Rousse, chaque quartier révèle ses secrets lumineux.</p>
+                </div>
+            </div>
+        </div>
     </section>
 
-    <!-- FACETTE ARTISTIQUE -->
-    <section id="art" class="py-20 bg-night">
-      <div class="max-w-7xl mx-auto px-6">
-        <h2 class="text-3xl font-bold text-gold mb-12">Facette artistique</h2>
-        <div id="gallery"
-             class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8"></div>
-      </div>
+    <!-- Frères Lumière -->
+    <section class="section cinema-section" id="cinema">
+        <div class="section-content">
+            <h2>Les Frères Lumière</h2>
+            <p style="text-align: center; font-size: 1.2rem; margin-bottom: 2rem; opacity: 0.9;">
+                Lyon, berceau du cinéma mondial
+            </p>
+
+            <div class="cinema-timeline">
+                <div class="timeline-line"></div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">1862</div>
+                    <div class="timeline-content">
+                        <h3>Naissance d'Auguste Lumière</h3>
+                        <p>Auguste Lumière naît à Besançon. La famille s'installera plus tard à Lyon, où commencera l'aventure du cinéma.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">1895</div>
+                    <div class="timeline-content">
+                        <h3>Première séance publique</h3>
+                        <p>Le 28 décembre 1895, au Grand Café de Paris, les frères Lumière organisent la première séance publique payante de l'histoire du cinéma.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">1896</div>
+                    <div class="timeline-content">
+                        <h3>L'Arroseur Arrosé</h3>
+                        <p>Tournage du premier film comique de l'histoire du cinéma dans les jardins de la propriété familiale à La Ciotat.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">Aujourd'hui</div>
+                    <div class="timeline-content">
+                        <h3>Institut Lumière</h3>
+                        <p>Le musée et l'institut perpétuent l'héritage des pionniers du cinéma dans leur villa familiale à Lyon.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 3rem;">
+                <button class="cta-btn">Visiter l'Institut Lumière</button>
+            </div>
+        </div>
     </section>
 
-    <!-- FACETTE NOCTURNE -->
-    <section id="map" class="relative h-[600px]">
-      <div id="lyonMap" class="absolute inset-0"></div>
-      <div
-        class="absolute top-6 left-6 bg-night/80 backdrop-blur p-4
-               rounded-xl shadow-lg max-w-xs">
-        <h3 class="text-xl font-bold text-gold mb-2">Facette nocturne</h3>
-        <p class="text-gray-300 text-sm">
-          Repérez les installations majeures de la prochaine Fête des Lumières.
-        </p>
-      </div>
+    <!-- Innovation -->
+    <section class="section innovation-section" id="innovation">
+        <div class="section-content">
+            <h2>Lyon, Lumière de l'Innovation</h2>
+            <p style="text-align: center; font-size: 1.2rem; margin-bottom: 2rem; opacity: 0.9;">
+                Une ville qui rayonne par ses innovations et son dynamisme
+            </p>
+
+            <div class="innovation-grid">
+                <div class="innovation-card">
+                    <div class="innovation-icon">🏭</div>
+                    <h3>Industrie de la Soie</h3>
+                    <p>Lyon fut le centre mondial de la soie, illuminant l'Europe par ses textiles précieux et ses innovations techniques.</p>
+                </div>
+
+                <div class="innovation-card">
+                    <div class="innovation-icon">🎓</div>
+                    <h3>Pôle Universitaire</h3>
+                    <p>Avec ses universités prestigieuses, Lyon forme les talents de demain et rayonne par sa recherche d'excellence.</p>
+                </div>
+
+                <div class="innovation-card">
+                    <div class="innovation-icon">🍽️</div>
+                    <h3>Capitale Gastronomique</h3>
+                    <p>Les "Mères lyonnaises" ont illuminé la gastronomie française, faisant de Lyon un phare culinaire mondial.</p>
+                </div>
+
+                <div class="innovation-card">
+                    <div class="innovation-icon">🏛️</div>
+                    <h3>Renaissance</h3>
+                    <p>Carrefour commercial européen, Lyon fut un foyer de Renaissance, illuminant l'art et la culture de son époque.</p>
+                </div>
+
+                <div class="innovation-card">
+                    <div class="innovation-icon">💡</div>
+                    <h3>Startups & Tech</h3>
+                    <p>Today, Lyon shine as a technology hub, fostering innovation in digital, biotechnology, and sustainable development.</p>
+                </div>
+
+                <div class="innovation-card">
+                    <div class="innovation-icon">🌱</div>
+                    <h3>Développement Durable</h3>
+                    <p>Pionnière en matière environnementale, Lyon illumine la voie vers une ville plus verte et durable.</p>
+                </div>
+            </div>
+        </div>
     </section>
 
-    <!-- À PROPOS -->
-    <section id="about" class="py-16 bg-night">
-      <div class="max-w-5xl mx-auto px-6 text-center">
-        <h2 class="text-3xl font-bold text-gold mb-6">À&nbsp;propos</h2>
-        <p class="text-gray-300">
-          Projet « Lyon &amp; Lumières » – Éclaireurs Numériques (xxxxxxxxx).
-          Données open-data, design first-mobile, neutre en CO₂.
-        </p>
-      </div>
-    </section>
+    <div class="tooltip"></div>
 
-    <footer
-      class="py-8 bg-night border-t border-gray-700 text-gray-400 text-center">
-      © 2025 Lyon & Lumières – Tous droits réservés
-    </footer>
+    <script>
+        // Curseur personnalisé
+        const cursor = document.querySelector('.custom-cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX - 10 + 'px';
+            cursor.style.top = e.clientY - 10 + 'px';
+        });
 
-    <!-- scripts -->
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script src="locations.js" defer></script>
-    <script src="app.js"      defer></script>
-  </body>
+        // Navigation
+        const navItems = document.querySelectorAll('.nav-item');
+        const sections = document.querySelectorAll('.section');
+
+        function navigateToSection(sectionId) {
+            sections.forEach(section => section.classList.remove('active'));
+            navItems.forEach(nav => nav.classList.remove('active'));
+            
+            document.getElementById(sectionId).classList.add('active');
+            document.querySelector(`[data-section="${sectionId}"]`).classList.add('active');
+        }
+
+        navItems.forEach(nav => {
+            nav.addEventListener('click', () => {
+                const sectionId = nav.dataset.section;
+                navigateToSection(sectionId);
+            });
+        });
+
+        // Floating lights
+        function createFloatingLight() {
+            const light = document.createElement('div');
+            light.className = 'floating-light';
+            light.style.left = Math.random() * 100 + 'vw';
+            light.style.animationDelay = Math.random() * 2 + 's';
+            light.style.animationDuration = (8 + Math.random() * 4) + 's';
+            document.querySelector('.floating-lights').appendChild(light);
+
+            setTimeout(() => {
+                light.remove();
+            }, 12000);
+        }
+
+        setInterval(createFloatingLight, 300);
+
+        // Tooltips pour la carte
+        const mapPoints = document.querySelectorAll('.map-point');
+        const tooltip = document.querySelector('.tooltip');
+
+        mapPoints.forEach(point => {
+            point.addEventListener('mouseenter', (e) => {
+                tooltip.textContent = e.target.dataset.tooltip;
+                tooltip.classList.add('show');
+            });
+
+            point.addEventListener('mouseleave', () => {
+                tooltip.classList.remove('show');
+            });
+
+            point.addEventListener('mousemove', (e) => {
+                tooltip.style.left = e.pageX + 10 + 'px';
+                tooltip.style.top = e.pageY - 30 + 'px';
+            });
+        });
+
+        // Animations au scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.light-card, .timeline-item, .innovation-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(50px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+
+        // Effet parallaxe subtil
+        document.addEventListener('mousemove', (e) => {
+            const mouseX = e.clientX / window.innerWidth;
+            const mouseY = e.clientY / window.innerHeight;
+            
+            document.querySelectorAll('.light-card, .innovation-card').forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const cardCenterX = rect.left + rect.width / 2;
+                const cardCenterY = rect.top + rect.height / 2;
+                
+                const distanceX = (e.clientX - cardCenterX) * 0.01;
+                const distanceY = (e.clientY - cardCenterY) * 0.01;
+                
+                card.style.transform = `translate(${distanceX}px, ${distanceY}px)`;
+            });
+        });
+
+        document.addEventListener('mousemove', resetInactivityTimer);
+        document.addEventListener('click', resetInactivityTimer);
+        resetInactivityTimer();
+
+        // Effets sonores simulés (vibrations tactiles sur mobile)
+        function hapticFeedback() {
+            if (navigator.vibrate) {
+                navigator.vibrate(50);
+            }
+        }
+
+        document.querySelectorAll('.light-card, .nav-item, .cta-btn').forEach(el => {
+            el.addEventListener('click', hapticFeedback);
+        });
+    </script>
+</body>
 </html>
