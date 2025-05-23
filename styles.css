@@ -489,6 +489,86 @@ body {
   color: #ff8317;
 }
 
+/* mise au point spécifique à cette page */
+.intro-section{
+  min-height:100vh;
+  padding:6rem 2rem 4rem;
+  background:linear-gradient(135deg,#1a1a2e,#16213e 40%,#0f3460);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  flex-direction:column;
+}
+.intro-section h1{
+  font-size:clamp(2.8rem,7vw,5rem);
+  margin-bottom:1.5rem;
+  background:linear-gradient(45deg,#ffd700,#ff6b35);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.intro-section p{
+  font-size:clamp(1rem,2.4vw,1.4rem);
+  max-width:900px;
+  opacity:.9;
+  line-height:1.6;
+}
+
+/* galerie photo */
+.lyon-gallery{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:1.5rem;
+  max-width:1200px;
+  margin:4rem auto;
+  padding:0 1rem;
+}
+.lyon-gallery figure{
+  position:relative;
+  overflow:hidden;
+  border-radius:20px;
+  cursor:pointer;
+}
+.lyon-gallery img{
+  width:100%;
+  height:240px;
+  object-fit:cover;
+  transition:transform .5s ease;
+}
+.lyon-gallery figure:hover img{
+  transform:scale(1.1);
+}
+.lyon-gallery figcaption{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  color:#ffd700;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  opacity:0;
+  transition:opacity .4s ease;
+  text-align:center;
+  padding:1rem;
+  line-height:1.4;
+}
+.lyon-gallery figure:hover figcaption{
+  opacity:1;
+}
+
+/* section carte */
+.poi-section{
+  padding:5rem 2rem 6rem;
+  background:linear-gradient(135deg,#0f3460,#16213e);
+}
+.poi-section h2{
+  font-size:clamp(2rem,5vw,4rem);
+  margin-bottom:2.5rem;
+  text-align:center;
+  background:linear-gradient(45deg,#ffd700,#ff6b35);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
 
 .team-card h3{
   font-size:1.25rem;

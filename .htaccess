@@ -7,6 +7,7 @@ RewriteBase /
 # Team → /team
 RewriteRule ^$            index.html       [L]
 RewriteRule ^team$        team.html        [L]
+RewriteRule ^ville$       ville.html       [L]
 
 # Generic rule: “/page” → “/page.html” (keeps future pages zero-config)
 RewriteCond %{REQUEST_FILENAME}.html -f
