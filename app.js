@@ -12,6 +12,14 @@ function resetInactivityTimer(){
   inactivityHandle = setTimeout(()=> document.body.style.cursor = 'default', 5000);
 }
 
+const burger = document.getElementById('hamburger');
+const menu   = document.getElementById('menu');
+
+burger.addEventListener('click', () => {
+  burger.classList.toggle('open');
+  menu.classList.toggle('open');
+});
+
 // Navigation
 const navItems  = document.querySelectorAll('.nav-item');
 const sections  = document.querySelectorAll('.section');
