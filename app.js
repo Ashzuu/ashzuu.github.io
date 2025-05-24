@@ -5,6 +5,13 @@ document.addEventListener('mousemove', (e) => {
   cursor.style.top = e.clientY - 10 + 'px';
 });
 
+let inactivityHandle = null;
+function resetInactivityTimer(){
+  clearTimeout(inactivityHandle);
+  document.body.style.cursor = 'none';
+  inactivityHandle = setTimeout(()=> document.body.style.cursor = 'default', 5000);
+}
+
 // Navigation
 const navItems  = document.querySelectorAll('.nav-item');
 const sections  = document.querySelectorAll('.section');

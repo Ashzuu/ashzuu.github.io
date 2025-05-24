@@ -4,7 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Découvrir Lyon – Capitale des Lumières</title>
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin="anonymous">
 
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin="anonymous" defer></script>
+    <script type="module" src="./map.js" defer></script>
+    
     <!-- feuille globale du projet -->
     <link rel="stylesheet" href="/styles.css">
 </head>
@@ -61,22 +70,9 @@
 <!-- POINTS D'INTÉRÊT -->
 <section class="poi-section">
     <h2>Points d’intérêt majeurs</h2>
-
-    <div class="map-container">
-        <!-- coordonnées approximatives pour mise en page -->
-        <div class="map-point" style="top:18%;left:48%;" data-tooltip="Basilique de Fourvière"></div>
-        <div class="map-point" style="top:28%;left:55%;" data-tooltip="Vieux Lyon – Cathédrale Saint-Jean"></div>
-        <div class="map-point" style="top:45%;left:60%;" data-tooltip="Place Bellecour"></div>
-        <div class="map-point" style="top:58%;left:68%;" data-tooltip="Musée des Confluences"></div>
-        <div class="map-point" style="top:35%;left:42%;" data-tooltip="Croix-Rousse – Mur des Canuts"></div>
-        <div class="map-point" style="top:52%;left:35%;" data-tooltip="Parc de la Tête d’Or"></div>
-        <div class="map-point" style="top:32%;left:62%;" data-tooltip="Théâtre Gallo-Romain"></div>
-    </div>
-
+    <div id="mapLyon" class="map-container"></div>
     <p style="text-align:center;font-size:1.1rem;margin-top:2.5rem;max-width:900px;margin-inline:auto;">
-        Utilisez les balises lumineuses pour repérer les incontournables&nbsp;: des vestiges
-        romains de Lugdunum à l’ultra-modernité du quartier Confluence, en passant par
-        les pentes créatives de la Croix-Rousse.
+        Utilisez les marqueurs pour explorer les incontournables de la ville.
     </p>
 </section>
 
@@ -85,7 +81,25 @@
     © 2025 Lyon &amp; ses Lumières
 </footer>
 
+<script type="module">
+    import { initLyonMap } from './map.js';
+
+    const poiLyon = [
+        { coords: [45.7622, 4.8228], label: 'Basilique de Fourvière' },
+        { coords: [45.7604, 4.8309], label: 'Cathédrale Saint-Jean' },
+        { coords: [45.7579, 4.8320], label: 'Place Bellecour' },
+        { coords: [45.7335, 4.8180], label: 'Musée des Confluences' },
+        { coords: [45.7742, 4.8357], label: 'Mur des Canuts' },
+        { coords: [45.7797, 4.8526], label: 'Parc de la Tête d’Or' },
+        { coords: [45.7606, 4.8232], label: 'Théâtre Gallo-Romain' }
+    ];
+
+    window.addEventListener('load', () =>
+        initLyonMap('mapLyon', poiLyon)
+    );
+</script>
+
 <!-- scripts communs -->
-<script src="app.js"></script>
+<script src="./app.js"></script>
 </body>
 </html>

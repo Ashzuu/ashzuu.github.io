@@ -58,6 +58,12 @@ body {
   position: relative;
 }
 
+header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 .hero h1 {
   font-size: clamp(3rem, 8vw, 8rem);
   font-weight: 900;

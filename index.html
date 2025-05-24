@@ -5,18 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lyon et ses Lumières</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin="anonymous">
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin="anonymous" defer></script>
+    <script type="module" src="/map.js" defer></script>
 </head>
 <body>
     <div class="custom-cursor"></div>
     <div class="floating-lights"></div>
 
-    <!-- Navigation -->
-    <nav class="nav">
-        <div class="nav-item active" data-section="hero" data-label="Accueil"></div>
-        <div class="nav-item" data-section="fete" data-label="Fête des Lumières"></div>
-        <div class="nav-item" data-section="cinema" data-label="Frères Lumière"></div>
-        <div class="nav-item" data-section="innovation" data-label="Innovation"></div>
-    </nav>
+    <header style="padding:1rem 2rem;position:relative;z-index:10;">
+        <a href="/" class="cta-btn" style="margin:0;">← Accueil</a>
+        <div>
+            <a href="/ville" class="cta-btn" style="margin:0;">La ville</a>
+            <a href="/team" class="cta-btn" style="margin:0;">La team</a>    
+        </div>
+        
+    </header>
 
     <!-- Hero Section -->
     <section class="hero section active" id="hero">
@@ -35,14 +45,8 @@
             <p style="text-align: center; font-size: 1.2rem; margin-bottom: 2rem; opacity: 0.9;">
                 Chaque décembre, Lyon se transforme en un théâtre de lumière extraordinaire
             </p>
-            
-            <div class="map-container">
-                <div class="map-point" style="top: 30%; left: 25%;" data-tooltip="Cathédrale Saint-Jean - Point de départ historique"></div>
-                <div class="map-point" style="top: 20%; left: 45%;" data-tooltip="Basilique de Fourvière - Vue panoramique"></div>
-                <div class="map-point" style="top: 60%; left: 35%;" data-tooltip="Place Bellecour - Plus grande place piétonne d'Europe"></div>
-                <div class="map-point" style="top: 40%; left: 60%;" data-tooltip="Théâtre des Célestins - Architecture lumineuse"></div>
-                <div class="map-point" style="top: 70%; left: 70%;" data-tooltip="Parc de la Tête d'Or - Illuminations naturelles"></div>
-            </div>
+
+            <div id="mapAccueil" class="map-container"></div>
 
             <div class="light-grid">
                 <div class="light-card">
@@ -165,6 +169,22 @@
 
     <div class="tooltip"></div>
 
-    <script src="app.js"></script>
+    <script type="module">
+        import { initLyonMap } from './map.js';
+
+        const poiAccueil = [
+            { coords: [45.7603, 4.8271], label: 'Cathédrale Saint-Jean' },
+            { coords: [45.7609, 4.8279], label: 'Pont Bonaparte' },
+            { coords: [45.7673, 4.8341], label: 'Place des Terreaux' },
+            { coords: [45.7580, 4.8001], label: 'Basilique de Fourvière' },
+            { coords: [45.7542, 4.8610], label: 'Parc de la Tête d’Or' }
+        ];
+
+        window.addEventListener('load', () =>
+            initLyonMap('mapAccueil', poiAccueil)
+        );
+    </script>
+    
+    <script src="./app.js"></script>
 </body>
 </html>
